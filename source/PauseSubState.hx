@@ -280,7 +280,9 @@ class PauseSubState extends MusicBeatSubstate
 					case 7:
 						FlxG.sound.play(Paths.sound("switch"));
 				}
+				#if sys
 				Sys.exit(0);
+				#end
 			}
 		#end
 

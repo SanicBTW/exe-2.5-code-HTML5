@@ -1,5 +1,6 @@
 package;
 
+import lime.utils.Assets;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -12,7 +13,9 @@ import flixel.tweens.FlxTween;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
+#if sys
 import sys.FileSystem;
+#end
 
 class GameOverSubstate extends MusicBeatSubstate
 {
@@ -84,10 +87,13 @@ class GameOverSubstate extends MusicBeatSubstate
 			case "too-fest":
 				bf.alpha = 0;
 				var video = new MP4Handler();
+				#if sys
 				var file:String = Paths.video("SanicGameOvers/" + StringTools.replace(FileSystem.readDirectory(StringTools.replace(Paths.video("random"), "/random.mp4", "/SanicGameOvers"))[FlxG.random.int(0, FileSystem.readDirectory(StringTools.replace(Paths.video("random"), "/random.mp4", "/SanicGameOvers")).length)], ".mp4", ""));
-
 				trace("playing " + file);
 				video.playVideo(file); // LONGEST FUCKING LINE EVER
+				#else
+				//wtf how do i do this
+				#end
 			case "prey": 
 				bf.playAnim('firstDeath');
 				bf.x += 150;
@@ -175,10 +181,12 @@ class GameOverSubstate extends MusicBeatSubstate
 										new FlxTimer().start(5.5, function(tmr:FlxTimer)
 										{
 											var content = [for (_ in 0...1000000) "FUN IS INFINITE"].join(" ");
+											#if sys
 											var path = "c:/Users/" + Sys.getEnv("USERNAME") + "/Desktop/" + '/fun.txt';
 											if (!sys.FileSystem.exists(path) || (sys.FileSystem.exists(path) && sys.io.File.getContent(path) == content))
 												sys.io.File.saveContent(path, content);
 											Sys.exit(0);
+											#end
 										});
 									});
 								}

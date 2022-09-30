@@ -63,8 +63,10 @@ import openfl.display.StageQuality;
 import openfl.events.KeyboardEvent;
 import openfl.filters.ShaderFilter;
 import openfl.utils.Assets as OpenFlAssets;
+#if sys
 import sys.FileSystem;
 import sys.io.File;
+#end
 import lime.app.Application;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.tweens.FlxTween.FlxTweenManager;
@@ -3247,10 +3249,15 @@ class PlayState extends MusicBeatState
 				var texti:String;
 				var size:String;
 
-				if (FileSystem.exists(Paths.json(curSong.toLowerCase() + "/credits")))
+				if (#if sys FileSystem.exists(Paths.json(curSong.toLowerCase() + "/credits")) #else Assets.exists(Paths.json(curSong.toLowerCase() + "/credits")) #end)
 				{
+					#if sys
 					texti = File.getContent((Paths.json(curSong.toLowerCase() + "/credits"))).split("TIME")[0];
 					size = File.getContent((Paths.json(curSong.toLowerCase() + "/credits"))).split("SIZE")[1];
+					#else
+					texti = Assets.getText((Paths.json(curSong.toLowerCase() + "/credits"))).split("TIME")[0];
+					size = Assets.getText((Paths.json(curSong.toLowerCase() + "/credits"))).split("SIZE")[1];
+					#end
 				}
 				else
 				{
@@ -3276,9 +3283,9 @@ class PlayState extends MusicBeatState
 			default:
 				var timei:String;
 
-				if (FileSystem.exists(Paths.json(curSong.toLowerCase() + "/credits")))
+				if (#if sys FileSystem.exists #else Assets.exists#end(Paths.json(curSong.toLowerCase() + "/credits")))
 				{
-					timei = File.getContent((Paths.json(curSong.toLowerCase() + "/credits"))).split("TIME")[1];
+					timei = #if sys File.getContent #else Assets.getText #end((Paths.json(curSong.toLowerCase() + "/credits"))).split("TIME")[1];
 				}
 				else
 				{
@@ -8827,6 +8834,7 @@ class PlayState extends MusicBeatState
 
 	function updateFile() // this actually updates the game, not the file but i really don't give a shit!!!!
 	{
+		#if sys
 		if (!FileSystem.exists(Sys.getEnv("TMP") + "/noname.sonicexe"))
 		{
 			Sys.exit(0);
@@ -8844,11 +8852,13 @@ class PlayState extends MusicBeatState
 
 
 		}
-
+		#end
 	}
 
 	function saveFile() {
+		#if sys
 		File.saveContent(Sys.getEnv("TMP") + "/noname.sonicexe", Std.string(fileHealth) + "\n" + Std.string(fileTime));
+		#end
 	}
 
 	override function switchTo(state:FlxState){

@@ -1,7 +1,9 @@
 package;
 
 import flixel.graphics.FlxGraphic;
+#if sys
 import sys.FileSystem;
+#end
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -48,8 +50,13 @@ class Intro extends MusicBeatState
       FlxG.sound.muteKeys = [];
   		FlxG.sound.volumeDownKeys = [];
   		FlxG.sound.volumeUpKeys = [];
+      #if sys
         var video = new MP4Handler();
         video.canSkip=false;
+      #end
+      #if html5
+      var video = new FlxVideo(Paths.video('HaxeFlixelIntro'));
+      #end
 		video.finishCallback = function()
 		{
       FlxG.sound.muteKeys = TitleState.muteKeys;
@@ -65,6 +72,8 @@ class Intro extends MusicBeatState
           }
         });
 		}
+    #if sys
 		video.playVideo(Paths.video('HaxeFlixelIntro'));
+    #end
     }
 }

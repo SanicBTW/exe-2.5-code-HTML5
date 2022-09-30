@@ -1,7 +1,9 @@
 package;
 
 import flixel.graphics.FlxGraphic;
+#if sys
 import sys.FileSystem;
+#end
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
